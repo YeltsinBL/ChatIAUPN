@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8" http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="static/style.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}"  >
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Chat-GPT</title>
+</head>
+
+<body >
+  {% block content %}
+    <!-- este es el bloque de contenido -->
+  {% endblock %}
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <script src="static/script.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</body>

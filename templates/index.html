@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="contenedor">
+    <!-- <div class="group flex items-center gap-1 rounded-xl py-2 px-3 text-lg 
+        font-medium overflow-hidden whitespace-nowrap">
+        <div class="text-[#daa520]">Chat Inteligente UPN <span class="text-[#daa520]"></span>
+        </div>
+    </div> -->
+    <div class="grid-container">
+      <div class="grid-item">
+        <div><p style="font-weight: bold;">Chat Inteligente UPN</p><br><br>¿En que puedo ayudarte? Algunos ejemplos</div>
+      </div>
+      <div class="grid-item grid-item-t">
+        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Dónde está la biblioteca?</div>
+        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Cuánto cuesta la matrícula?</div>
+        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Cuánto cuesta la pre-matrícula?</div>  
+        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Puedo estacionar mi carro?</div>
+        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Dónde está la cafetería?</div>
+        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Puedo entrar con bicicleta?</div> 
+      </div>
+    </div>
+    <div class="message-box hidden">
+      <!-- <div class="chat response">
+         <img src="../static/img/upn.svg"  alt="icono upn"/>
+        <span>¡Hola!<br>
+          Soy un chatbot para la Universidad Privada del Norte. Puedes hacerme preguntas.
+        </span> 
+      </div> -->
+    </div>
+    <div class="grid-container-botontipo">
+      <div class="grid-item-botontipo">
+        <div id="entrenado" class="grid-item-botontipo-two cursor-pointer hover-div hover:bg-gray-700 hover:scale-105 transition duration-300">Respuesta Entrenada</div>
+        <div id="automatico" class="grid-item-botontipo-two cursor-pointer hover-div hover:bg-gray-700 hover:scale-105 transition-transform duration-300">Respuesta Automática</div>
+      </div>
+    </div>
+    <div class="messagebar transform -translate-x-1/2">
+      <div class="bar-wrapper">
+        <input type="text" id="input_message" name="input_message" placeholder="Ingresa tu mensaje...">
+        <button type="submit" onclick="buscar_respuesta()">
+          <img src = "../static/img/send.svg" alt="enviar mensaje"/>
+        </button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
