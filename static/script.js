@@ -3,7 +3,7 @@ const sendBtn = document.querySelector(".bar-wrapper button");
 const messageBox = document.querySelector(".message-box");
 const input_message = document.getElementById('input_message')
 let respuesta_entrenada=false
-
+let nro_pregunta =0
 input_message.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
    event.preventDefault();
@@ -17,6 +17,7 @@ sendBtn.onclick = function () {
 
 function buscar_respuesta(UserTypedMessage, entrenado) {
   try {
+    nro_pregunta++
     // Ocultar la vista principal y activar la vista de los mensajes
     document.querySelector(".grid-container").classList.add('hidden');
     document.querySelector(".message-box").classList.remove('hidden');
@@ -37,6 +38,7 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
         <span class= "new">Obteniendo respuesta...</span>
         <button id="play_btnVoz" class="boton" onclick="reproducir_voz(this)">
           <img id="img_volume" class="img_volumen" src="../static/img/volume.svg">
+          <audio class="audioprueba" src="http://localhost:5000/wav" hidden>
         </button>
       </div>`
     messageBox.insertAdjacentHTML("beforeend", message);
@@ -47,10 +49,11 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
     $.ajax({
       type: "POST",
       url: "/",
-      data:{mensaje:UserTypedMessage, tipo_entrenado:entrenado},
+      data:{mensaje:UserTypedMessage, tipo_entrenado:entrenado, numero_pregunta:nro_pregunta},
       dataType: 'json',
       async: false,
       success: function (data) {
+        console.log(data)
         if(entrenado){
           console.log(data.fin)
           // Crear un elemento ul
@@ -66,7 +69,12 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
           ChatBotResponse.appendChild(ul)
         }else{
           ChatBotResponse.innerHTML = data.fin
+          const audio_prueba = document.querySelector(".response .boton .audioprueba");
+          audio_prueba.src="http://localhost:5000/wav/"+data.audio
           lector_texto(document.getElementsByClassName("img_volumen"), data.fin)
+          
+          //audio_prueba.controls = true;
+          //audio_prueba.play()
         }
         ChatBotResponse.classList.remove("new");
       },
@@ -88,6 +96,7 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
 // #region Audio
 var speechSynth = window.speechSynthesis
 var speechUtterance = new SpeechSynthesisUtterance()
+speechUtterance.volume = 0
 var playBtn = document.querySelector("#img_volume")
 volume_off= "../static/img/volume.svg"
 volume_on="../static/img/volume_on.svg"
@@ -110,14 +119,19 @@ function reproducir_voz(elemento) {
 }
 
 function lector_texto(elemento=null,texto) {
+  const audio_prueba = document.querySelector(".response .boton .audioprueba");
   if(elemento!=null){
     playBtn = elemento[elemento.length-1]
   }
   speechUtterance.text = texto
   if (speechSynth.speaking && !speechSynth.paused) {
     speechSynth.cancel();
+    audio_prueba.muted = true
+    audio_prueba.pause()
   } else {
     speechSynth.speak(speechUtterance);
+    audio_prueba.muted = false
+    audio_prueba.play()
   }
 }
 
