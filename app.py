@@ -1,5 +1,5 @@
 """Aplicación Principal"""
-import os
+# import os
 from flask import Flask, render_template, request, jsonify
 from ChatbotUPN import encontrar_respuesta
 from GenerarTexto import respuestas_generadas

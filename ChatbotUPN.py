@@ -12,8 +12,8 @@ def cargar_corpus(ruta_archivo):
             pregunta, respuesta = line.strip().split("|")
             preguntas_respuestas.append((pregunta.strip(), respuesta.strip()))
     return preguntas_respuestas
-ruta_archivo = os.getcwd()+"/CorpusChatBot.txt"
-corpus = cargar_corpus(ruta_archivo)
+# ruta_archivo = os.getcwd()+"/CorpusChatBot.txt"
+# corpus = cargar_corpus(ruta_archivo)
 
 def preprocess(text):
     tokens = word_tokenize(text.lower())
@@ -21,11 +21,11 @@ def preprocess(text):
     tokens = [token for token in tokens if token not in stop_words]
     return tokens
 
-def encontrar_respuesta(input_text, file_corpus= corpus):
+def encontrar_respuesta(input_text):
     input_tokens = preprocess(input_text)
     max_similarity = 0
     best_match = None
-    for pregunta, respuesta in file_corpus:
+    for pregunta, respuesta in cargar_corpus(os.getcwd()+"/CorpusChatBot.txt"):
         pregunta_tokens = preprocess(pregunta)
         similarity = len(set(input_tokens) & set(pregunta_tokens))
         if similarity > max_similarity:
