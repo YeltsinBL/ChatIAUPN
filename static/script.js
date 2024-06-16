@@ -2,7 +2,7 @@ const messageBar = document.querySelector(".bar-wrapper input");
 const sendBtn = document.querySelector(".bar-wrapper button");
 const messageBox = document.querySelector(".message-box");
 const input_message = document.getElementById('input_message')
-let respuesta_entrenada=false
+let respuesta_entrenada=true
 let nro_pregunta =0
 input_message.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
@@ -35,11 +35,16 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
     let respuesta = 
       `<div class="chat response">
         <img src="../static/img/upn.svg">
-        <span class= "new">Obteniendo respuesta...</span>
-        <button id="play_btnVoz" class="boton" onclick="reproducir_voz(this)">
-          <img id="img_volume" class="img_volumen" src="../static/img/volume.svg">
-          <audio class="audioprueba" src="http://localhost:5000/wav" hidden>
-        </button>
+        <div class="respuesta">
+          <span class= "new">Obteniendo respuesta...</span>
+          <div class="multimedia">
+            <button id="play_btnVoz" class="boton" onclick="reproducir_voz(this)">
+              <img id="img_volume" class="img_volumen" src="../static/img/volume.svg">
+              <audio class="audioprueba" src="http://localhost:5000/wav" hidden>
+            </button>
+            <button>PDF</button>
+          </div>
+        </div>
       </div>`
     messageBox.insertAdjacentHTML("beforeend", message);
     messageBox.insertAdjacentHTML("beforeend", respuesta);
@@ -69,12 +74,10 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
           ChatBotResponse.appendChild(ul)
         }else{
           ChatBotResponse.innerHTML = data.fin
-          const audio_prueba = document.querySelector(".response .boton .audioprueba");
-          audio_prueba.src="http://localhost:5000/wav/"+data.audio
-          lector_texto(document.getElementsByClassName("img_volumen"), data.fin)
-          
-          //audio_prueba.controls = true;
-          //audio_prueba.play()
+          const divs = document.querySelectorAll('.response .respuesta .multimedia .boton .audioprueba')
+          const lastDiv = divs[divs.length - 1];
+          lastDiv.src="http://localhost:5000/wav/"+data.audio
+          lector_texto(document.getElementsByClassName("img_volumen"), data.fin, lastDiv)
         }
         ChatBotResponse.classList.remove("new");
       },
@@ -114,25 +117,44 @@ speechUtterance.onend = function() {
 };
 function reproducir_voz(elemento) {
   playBtn = elemento.querySelector("#img_volume")
-  valor = elemento.parentNode.querySelector('span').innerText
-  lector_texto(null,valor)
+  valor = elemento.parentNode.parentNode.querySelector('span').innerText
+  audio= elemento.querySelector(".audioprueba")
+
+  lector_texto(null,valor,audio)
 }
 
-function lector_texto(elemento=null,texto) {
-  const audio_prueba = document.querySelector(".response .boton .audioprueba");
+function lector_texto(elemento=null,texto, audio) {
   if(elemento!=null){
     playBtn = elemento[elemento.length-1]
   }
+  /*
   speechUtterance.text = texto
   if (speechSynth.speaking && !speechSynth.paused) {
     speechSynth.cancel();
     audio_prueba.muted = true
     audio_prueba.pause()
+    audio_prueba.currentTime = 0;
   } else {
     speechSynth.speak(speechUtterance);
     audio_prueba.muted = false
     audio_prueba.play()
   }
+*/
+  if (audio.paused) {
+    audio.play();
+    playBtn.src = volume_on;
+    playBtn.style.filter= "invert(1)"
+  } else {
+      audio.pause();
+      audio.currentTime = 0;
+      playBtn.src = volume_off;
+      playBtn.style.filter= "invert(0)"
+  }
+  audio.addEventListener('ended', () => {
+    playBtn.src = volume_off;
+    playBtn.style.filter= "invert(0)"
+  });
+
 }
 
 // #endregion
@@ -143,9 +165,18 @@ document.querySelectorAll('.grid-item-two').forEach(div => {
       buscar_respuesta(this.innerText, respuesta_entrenada)
   });
 });
-document.querySelectorAll('.grid-item-botontipo-two').forEach(div => {
-  div.addEventListener('click', function() {
-      respuesta_entrenada = this.id=="entrenado" ? true:false
-  });
+
+const toggleSwitch = document.getElementById('toggle-switch');
+const toggleLabel = document.getElementById('toggle-label');
+toggleSwitch.addEventListener('change', () => {
+    if (toggleSwitch.checked) {
+      toggleLabel.textContent = 'Entrenada';
+      toggleLabel.style.color='#daa520'
+      respuesta_entrenada = true;
+    } else {
+      toggleLabel.textContent = 'Automática';
+      toggleLabel.style.color='#000'
+      respuesta_entrenada = false;
+    }
 });
 // #endregion

@@ -7,9 +7,12 @@
         <div class="text-[#daa520]">Chat Inteligente UPN <span class="text-[#daa520]"></span>
         </div>
     </div> -->
+      <div class="grid-item">
+        <div><p style="font-weight: bold;">Chat Inteligente UPN</p></div>
+      </div>
     <div class="grid-container">
       <div class="grid-item">
-        <div><p style="font-weight: bold;">Chat Inteligente UPN</p><br><br>¿En que puedo ayudarte? Algunos ejemplos</div>
+        <div>¿En que puedo ayudarte? Algunos ejemplos</div>
       </div>
       <div class="grid-item grid-item-t">
         <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Dónde está la biblioteca?</div>
@@ -23,15 +26,28 @@
     <div class="message-box hidden">
       <!-- <div class="chat response">
          <img src="../static/img/upn.svg"  alt="icono upn"/>
-        <span>¡Hola!<br>
-          Soy un chatbot para la Universidad Privada del Norte. Puedes hacerme preguntas.
-        </span> 
+        <div id="respuesta" class="respuesta">
+          <span>¡Hola!<br>
+            Soy un chatbot para la Universidad Privada del Norte. Puedes hacerme preguntas.
+          </span>
+          <div id="multimedia" class="multimedia">
+          <button id="play_btnVoz" class="boton" onclick="reproducir_voz(this)">
+            <img id="img_volume" class="img_volumen" src="../static/img/volume.svg">
+            <audio class="audioprueba" src="http://localhost:5000/wav" hidden>
+          </button>
+          </div>
+        </div>
+
       </div> -->
     </div>
     <div class="grid-container-botontipo">
       <div class="grid-item-botontipo">
-        <div id="entrenado" class="grid-item-botontipo-two cursor-pointer hover-div hover:bg-gray-700 hover:scale-105 transition duration-300">Respuesta Entrenada</div>
-        <div id="automatico" class="grid-item-botontipo-two cursor-pointer hover-div hover:bg-gray-700 hover:scale-105 transition-transform duration-300">Respuesta Automática</div>
+        <div id="entrenado" >Respuesta
+        <label class="switch">
+            <input type="checkbox" id="toggle-switch" checked>
+            <span class="slider"></span>
+        </label>
+        <span id="toggle-label" class="toggle-label">Entrenada</span></div>
       </div>
     </div>
     <div class="messagebar transform -translate-x-1/2">

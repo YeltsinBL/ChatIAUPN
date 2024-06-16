@@ -1,6 +1,6 @@
 """Aplicación Principal"""
 # import os
-from flask import Flask, render_template, request, jsonify,send_file, Response
+from flask import Flask, render_template, request, jsonify, Response
 from ChatbotUPN import encontrar_respuesta
 from GenerarTexto import respuestas_generadas
 from tts_api_vits import generar_Audio
@@ -14,6 +14,7 @@ def home():
         resp =""
         if request.form["tipo_entrenado"].capitalize() =="True":
             resp = respuestas_generadas(request.form["mensaje"])
+            audio=""
         else:
             resp= encontrar_respuesta(request.form["mensaje"])
             audio = generar_Audio(resp,request.form["numero_pregunta"])

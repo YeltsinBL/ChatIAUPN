@@ -220,13 +220,64 @@ p{
 }
 
 .grid-item-botontipo-two {
-  background-color: rgba(126, 124, 124, 0.8);
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 5px;
-  /*font-size: 30px;
-  border-color: #a5a4a2;*/
+  /*
+  background-color: rgba(126, 124, 124, 0.8);
+  font-size: 30px;
+  border-color: #a5a4a2;
+  color: #ffffff;*/
   text-align: center;
-  color: #ffffff;
   border-style: solid;
   border-radius: 50px;
+}
+
+/**Toggle Switch**/
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #daa520;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.toggle-label {
+  margin-left: 10px;
 }
