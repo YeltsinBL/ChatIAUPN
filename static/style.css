@@ -35,6 +35,9 @@ body{
 
 .response{
   background-color: goldenrod;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-radius: 50px;
+  margin-bottom: 5px;
 }
 
 .messagebar{
@@ -99,6 +102,11 @@ body{
 .message-box {
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
   scrollbar-width: none;  /* Firefox */
+}
+.message{
+  border: 1px solid rgba(126, 125, 125, 0.8);
+  border-radius: 34px;
+  margin-bottom: 5px;
 }
 
 #play_btnVoz {

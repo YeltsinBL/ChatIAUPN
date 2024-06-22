@@ -7,14 +7,25 @@ let nro_pregunta =0
 input_message.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
    event.preventDefault();
-   buscar_respuesta(messageBar.value, respuesta_entrenada)
+   
+   buscar_respuesta(verificar_signosinterrogacion(messageBar.value), respuesta_entrenada)
   }
 });
 
 sendBtn.onclick = function () {
-  buscar_respuesta(messageBar.value, respuesta_entrenada)
+  buscar_respuesta(verificar_signosinterrogacion(messageBar.value), respuesta_entrenada)
 }
-
+function verificar_signosinterrogacion(texto){
+  const inputText = texto.trim();
+    let resultText = inputText;
+    if (!inputText.startsWith('¿')) {
+        resultText = '¿' + resultText;
+    }
+    if (!inputText.endsWith('?')) {
+        resultText += '?';
+    }
+    return resultText
+}
 function buscar_respuesta(UserTypedMessage, entrenado) {
   try {
     nro_pregunta++
@@ -61,8 +72,19 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
         console.log(data)
         if(entrenado){
           console.log(data.fin)
+          if(data.fin.length >0) {
+            let verificar=0
+            data.fin.forEach((dato) => {
+              verificar +=1
+              const ChatBotResponse = document.querySelector(".response .new");
+              console.log(dato)
+              ChatBotResponse.innerHTML = `${dato}`
+              ChatBotResponse.classList.remove("new");
+              if(verificar<data.fin.length)messageBox.insertAdjacentHTML("beforeend", respuesta);
+            });
+          }
           // Crear un elemento ul
-          const ul = document.createElement('ul')
+          /*const ul = document.createElement('ul')
           ul.classList.add('list-disc', 'pl-5')
           data.fin.forEach((respuesta) => {
             const li = document.createElement('li')
@@ -71,8 +93,10 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
           });
           // Agregar ul al div
           ChatBotResponse.innerHTML = ""
-          ChatBotResponse.appendChild(ul)
+          ChatBotResponse.appendChild(ul)*/
         }else{
+          //messageBox.insertAdjacentHTML("beforeend", respuesta);
+          //const ChatBotResponse = document.querySelector(".response .new");
           ChatBotResponse.innerHTML = data.fin
           const divs = document.querySelectorAll('.response .respuesta .multimedia .boton .audioprueba')
           const lastDiv = divs[divs.length - 1];
