@@ -23,6 +23,9 @@
         <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Puedo entrar con bicicleta?</div> 
       </div>
     </div>
+    <div class="container mx-auto space-y-4">
+      <div id="alert-div">¡Realice al menos una pregunta!</div>
+  </div>
     <div class="message-box hidden">
       <!-- <div class="chat response">
          <img src="../static/img/upn.svg"  alt="icono upn"/>
@@ -35,6 +38,7 @@
             <img id="img_volume" class="img_volumen" src="../static/img/volume.svg">
             <audio class="audioprueba" src="http://localhost:5000/wav" hidden>
           </button>
+          <button>PDF</button>
           </div>
         </div>
 
@@ -52,8 +56,11 @@
     </div>
     <div class="messagebar transform -translate-x-1/2">
       <div class="bar-wrapper">
+        <button type="submit" class="boton_pdf hidden" onclick="descargar_pdf()">
+          <img src = "../static/img/pdf.svg" alt="descargar en pdf"/>
+        </button>
         <input type="text" id="input_message" name="input_message" placeholder="Ingresa tu mensaje...">
-        <button type="submit" onclick="buscar_respuesta()">
+        <button type="submit" class="generar_respuesta" onclick="buscar_respuesta()">
           <img src = "../static/img/send.svg" alt="enviar mensaje"/>
         </button>
       </div>
