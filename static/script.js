@@ -8,6 +8,7 @@ input_message.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
    event.preventDefault();
    
+   //buscar_respuesta(messageBar.value, respuesta_entrenada)
    buscar_respuesta(verificar_signosinterrogacion(messageBar.value), respuesta_entrenada)
   }
 });
@@ -49,7 +50,7 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
         <img src="../static/img/upn.svg">
         <div class="respuesta">
           <span class= "new">Obteniendo respuesta...</span>
-          <div class="multimedia">
+          <div class="multimedia hidden">
             <button id="play_btnVoz" class="boton" onclick="reproducir_voz(this)">
               <img id="img_volume" class="img_volumen" src="../static/img/volume.svg">
               <audio class="audioprueba" src="http://localhost:5000/wav" hidden>
@@ -75,10 +76,20 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
           if(data.fin.length >0) {
             let verificar=0
             data.fin.forEach((dato) => {
-              verificar +=1
               const ChatBotResponse = document.querySelector(".response .new");
               console.log(dato)
               ChatBotResponse.innerHTML = `${dato}`
+              if(!dato.includes("Lo siento,")){
+                const divs = document.querySelectorAll('.response .multimedia')
+                const lastDiv = divs[divs.length - 1];
+                console.log(lastDiv)
+                const aud = lastDiv.querySelector('.boton .audioprueba')
+                console.log(aud)
+                aud.src="http://localhost:5000/wav/"+data.audio[verificar]
+                lector_texto(document.getElementsByClassName("img_volumen"), dato, aud)
+                lastDiv.classList.remove('hidden');
+              }
+              verificar +=1
               ChatBotResponse.classList.remove("new");
               if(verificar<data.fin.length)messageBox.insertAdjacentHTML("beforeend", respuesta);
             });
@@ -98,16 +109,18 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
           //messageBox.insertAdjacentHTML("beforeend", respuesta);
           //const ChatBotResponse = document.querySelector(".response .new");
           ChatBotResponse.innerHTML = data.fin
-          const divs = document.querySelectorAll('.response .respuesta .multimedia .boton .audioprueba')
+          const divs = document.querySelectorAll('.response .multimedia')
           const lastDiv = divs[divs.length - 1];
-          lastDiv.src="http://localhost:5000/wav/"+data.audio
-          lector_texto(document.getElementsByClassName("img_volumen"), data.fin, lastDiv)
+          const aud = lastDiv.querySelector('.boton .audioprueba')
+          aud.src="http://localhost:5000/wav/"+data.audio
+          lector_texto(document.getElementsByClassName("img_volumen"), data.fin, aud)
+          lastDiv.classList.remove('hidden');
         }
         ChatBotResponse.classList.remove("new");
       },
       error: function () {
           console.log('Error en obtener respuestas');
-          ChatBotResponse.innerHTML = "Opps! Ha ocurrido un error, por favor intente de nuevo"
+          ChatBotResponse.innerHTML = "Lo siento, no he logrado comprender tu pregunta. Pregunta de nuevo por favor."
           ChatBotResponse.classList.remove("new");
       }
     }, 100);
@@ -146,7 +159,8 @@ function reproducir_voz(elemento) {
 
   lector_texto(null,valor,audio)
 }
-
+let currentAudio = null
+let beforePlayBtn=null
 function lector_texto(elemento=null,texto, audio) {
   if(elemento!=null){
     playBtn = elemento[elemento.length-1]
@@ -164,19 +178,33 @@ function lector_texto(elemento=null,texto, audio) {
     audio_prueba.play()
   }
 */
+  // Pausar el audio actual si está reproduciéndose
+  if (currentAudio && currentAudio !== audio) {
+    console.log("Entro a pausar")
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    beforePlayBtn.src = volume_off;
+    beforePlayBtn.style.filter= "invert(0)"
+  }
   if (audio.paused) {
+    currentAudio=audio
     audio.play();
     playBtn.src = volume_on;
     playBtn.style.filter= "invert(1)"
+    beforePlayBtn= playBtn
   } else {
+      currentAudio=null
       audio.pause();
       audio.currentTime = 0;
       playBtn.src = volume_off;
       playBtn.style.filter= "invert(0)"
+      beforePlayBtn= playBtn
   }
   audio.addEventListener('ended', () => {
+    currentAudio=null
     playBtn.src = volume_off;
     playBtn.style.filter= "invert(0)"
+    beforePlayBtn= playBtn
   });
 
 }
@@ -206,15 +234,19 @@ toggleSwitch.addEventListener('change', () => {
 // #endregion
 
 // #region PDF
-function descargar_pdf(){
-  //console.log(JSON.stringify({html:document.documentElement.outerHTML}))
+function descargar_pdf(elemento){
+  //console.log(elemento)
   try {
-  console.log(messageBox.classList.contains('hidden'))
+  elemento.disabled = true;
+  elemento.querySelector('.imgboton').style.filter= "invert(50%)"
+  //console.log(messageBox.classList.contains('hidden'))
   if(messageBox.classList.contains('hidden')){
     const alertDiv = document.getElementById('alert-div');
             alertDiv.style.display = 'block';
             setTimeout(() => {
                 alertDiv.style.display = 'none';
+                elemento.disabled = false;
+                elemento.querySelector('.imgboton').style.filter= "invert(0)"
             }, 3000); // 3000 milisegundos = 3 segundos
   }else{
     /*event.preventDefault();
@@ -241,58 +273,42 @@ function descargar_pdf(){
       }
     }, 100);
   });*/
-
-    /*const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const element = messageBox
-    doc.html(element, {
-      callback: function(pdf){
-        pdf.save('PDF_ChatInteligenteUPN.pdf')
-      },
-      x:15,
-      y:0,
-      html2canvas:{scale:0.15}
-    })*/
       const childDivs = document.querySelectorAll('.chat');
       let totalHeight = 0;
 
       childDivs.forEach(div => {
           totalHeight += div.offsetHeight;
       });
-      console.log(totalHeight)
+      //console.log(totalHeight)
       const { jsPDF } = window.jspdf;
-            //const div = document.querySelector('.content');
 
-            html2canvas(messageBox, {
-                scrollY: -window.scrollY, // Asegura que captura todo el contenido del div
-                windowWidth: messageBox.scrollWidth,
-                windowHeight: totalHeight*2//messageBox.scrollHeight
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = pdf.internal.pageSize.getHeight();
-
-                const imgProps = pdf.getImageProperties(imgData);
-                const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-                let heightLeft = imgHeight;
-                let position = 5;
-
-                // Add first page
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-                heightLeft -= pdfHeight;
-
-                // Add remaining pages
-                while (heightLeft > 0) {
-                    position = heightLeft - imgHeight + 5;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-                    heightLeft -= pdfHeight;
-                }
-
-                pdf.save("scrollable_div_content.pdf");
-            });
+      html2canvas(messageBox, {
+          scrollY: -window.scrollY, // Asegura que captura todo el contenido del div
+          windowWidth: messageBox.scrollWidth,
+          windowHeight: totalHeight*2//messageBox.scrollHeight
+      }).then(canvas => {
+          const imgData = canvas.toDataURL('image/png');
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = pdf.internal.pageSize.getHeight();
+          const imgProps = pdf.getImageProperties(imgData);
+          const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+          let heightLeft = imgHeight;
+          let position = 5;
+          // Add first page
+          pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+          heightLeft -= pdfHeight;
+          // Add remaining pages
+          while (heightLeft > 0) {
+              position = heightLeft - imgHeight + 5;
+              pdf.addPage();
+              pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+              heightLeft -= pdfHeight;
+          }
+          pdf.save("PDF_ChatInteligenteUPN.pdf");
+          elemento.disabled = false;
+          elemento.querySelector('.imgboton').style.filter= "invert(0)"
+      });
   }
   } catch (error) {
     console.error(error);

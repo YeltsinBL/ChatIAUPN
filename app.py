@@ -22,7 +22,9 @@ def home():
         resp =""
         if request.form["tipo_entrenado"].capitalize() =="True":
             resp = respuestas_generadas(request.form["mensaje"])
-            audio=""
+            audio=[]
+            for index, res in enumerate(resp):
+                audio.append(generar_Audio(res,f"{request.form['numero_pregunta']}_{index}"))
         else:
             resp= encontrar_respuesta(request.form["mensaje"])
             audio = generar_Audio(resp,request.form["numero_pregunta"])

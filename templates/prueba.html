@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exportar Div con Scroll a PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .scrollable-content {
+            width: 600px;
+            height: 400px;
+            overflow: auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .content {
+            height: 1200px; /* Altura mayor que el contenedor para habilitar el desplazamiento */
+        }
+    </style>
+</head>
+<body>
+    <div class="scrollable-content">
+        <div class="content">
+            <h1>Contenido Largo del Div</h1>
+            <p>Este es un ejemplo de contenido dentro de un div que se exportará a un PDF. Este div tiene suficiente contenido para requerir desplazamiento.</p>
+            <p>Puedes agregar cualquier contenido HTML aquí, incluyendo texto, imágenes, tablas, etc. Esto es solo una demostración.</p>
+            <p>Más contenido... Más contenido... Más contenido... Más contenido... Más contenido... Más contenido...</p>
+            <p>Incluso más contenido... Incluso más contenido... Incluso más contenido... Incluso más contenido...</p>
+            <h1>Contenido Largo del Div</h1>
+            <p>Este es un ejemplo de contenido dentro de un div que se exportará a un PDF. Este div tiene suficiente contenido para requerir desplazamiento.</p>
+            <p>Puedes agregar cualquier contenido HTML aquí, incluyendo texto, imágenes, tablas, etc. Esto es solo una demostración.</p>
+            <p>Más contenido... Más contenido... Más contenido... Más contenido... Más contenido... Más contenido...</p>
+            <p>Incluso más contenido... Incluso más contenido... Incluso más contenido... Incluso más contenido...</p>
+            <h1>Contenido Largo del Div</h1>
+            <p>Este es un ejemplo de contenido dentro de un div que se exportará a un PDF. Este div tiene suficiente contenido para requerir desplazamiento.</p>
+            <p>Puedes agregar cualquier contenido HTML aquí, incluyendo texto, imágenes, tablas, etc. Esto es solo una demostración.</p>
+            <p>Más contenido... Más contenido... Más contenido... Más contenido... Más contenido... Más contenido...</p>
+            <p>Incluso más contenido... Incluso más contenido... Incluso más contenido... Incluso más contenido...</p>
+            <h1>Contenido Largo del Div</h1>
+            <p>Este es un ejemplo de contenido dentro de un div que se exportará a un PDF. Este div tiene suficiente contenido para requerir desplazamiento.</p>
+            <p>Puedes agregar cualquier contenido HTML aquí, incluyendo texto, imágenes, tablas, etc. Esto es solo una demostración.</p>
+            <p>Más contenido... Más contenido... Más contenido... Más contenido... Más contenido... Más contenido...</p>
+            <p>Incluso más contenido... Incluso más contenido... Incluso más contenido... Incluso más contenido...</p>
+        </div>
+    </div>
+    <button id="generate-pdf">Generar PDF</button>
+    <script>
+        document.getElementById('generate-pdf').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const div = document.querySelector('.content');
+
+            html2canvas(div, {
+                scrollY: -window.scrollY, // Asegura que captura todo el contenido del div
+                windowWidth: div.scrollWidth,
+                windowHeight: div.scrollHeight
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+
+                const imgProps = pdf.getImageProperties(imgData);
+                const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                // Add first page
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdfHeight;
+
+                // Add remaining pages
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                    heightLeft -= pdfHeight;
+                }
+
+                pdf.save("scrollable_div_content.pdf");
+            });
+        });
+    </script>
+</body>
+</html>

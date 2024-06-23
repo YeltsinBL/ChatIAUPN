@@ -56,8 +56,8 @@
     </div>
     <div class="messagebar transform -translate-x-1/2">
       <div class="bar-wrapper">
-        <button type="submit" class="boton_pdf hidden" onclick="descargar_pdf()">
-          <img src = "../static/img/pdf.svg" alt="descargar en pdf"/>
+        <button type="submit" class="boton_pdf" onclick="descargar_pdf(this)">
+          <img class="imgboton" src = "../static/img/pdf.svg" alt="descargar en pdf"/>
         </button>
         <input type="text" id="input_message" name="input_message" placeholder="Ingresa tu mensaje...">
         <button type="submit" class="generar_respuesta" onclick="buscar_respuesta()">
