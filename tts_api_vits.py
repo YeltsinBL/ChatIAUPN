@@ -4,12 +4,11 @@ from TTS.api import TTS
 
 # Obtener texto
 # texto ="Sí, la universidad cuenta con un estacionamiento para bicicletas." #sys.argv[1]
+# Cuda o CPU
+device = "cuda" if torch.cuda.is_available() else "cpu"
+# Iniciar TTS
+tts = TTS("tts_models/es/css10/vits").to(device)
 def generar_Audio(texto,nro):
-    # Cuda o CPU
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-
-    # Iniciar TTS
-    tts = TTS("tts_models/es/css10/vits").to(device)
 
     archivo=f"tts_vits{nro}"
     # Generar .wav
