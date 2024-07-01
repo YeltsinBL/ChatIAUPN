@@ -1,7 +1,7 @@
+import time
 from transformers import AutoTokenizer, AutoModel,pipeline
 import torch
 import faiss
-import numpy as np
 
 with open('corpusSincoma.txt', 'r', encoding='utf-8') as f:
     lines = f.readlines()
@@ -28,32 +28,28 @@ index.add(document_embeddings)
 
 id_to_document = {i: doc for i, doc in enumerate(documents)}
 
-#def retrieve(query, k=1):
-#    query_embedding = embed_texts([query]).numpy()
-#    distances, indices = index.search(query_embedding, k)
-#    return [(id_to_document[idx], distances[0][i]) for i, idx in enumerate(indices[0])]
-
-#query = "cuándo empiezan las clases?"
-#retrieved_docs = retrieve(query, k=1)
-
-
-#
-
 qa_model_name = "mrm8488/bert-base-spanish-wwm-cased-finetuned-spa-squad2-es"
 qa_pipeline = pipeline("question-answering", model=qa_model_name, tokenizer=qa_model_name)
 
 def answer_question(question):
+    """Generar Respuestas"""
     query_embedding = embed_texts([question]).numpy()
     distances, indices = index.search(query_embedding, 1)
 
     #query = "cuándo empiezan las clases?"
+    start_time = time.time()
     respuesta = []
     retrieved_docs = [(id_to_document[idx], distances[0][i]) for i, idx in enumerate(indices[0])]
     result = qa_pipeline(question=question, context=retrieved_docs[0][0])
-    resp = result["answer"]
-    print("result type", type(resp))
+    score = round(float(result["score"]),3) #round(float_number, 2)
+    if score >= 0.1:
+        resp = result["answer"]
+    else:
+        resp = "Lo siento, no he logrado comprender tu pregunta. Pregunta de nuevo por favor."
     respuesta.append(resp)
-    return respuesta
+    answer_time = time.time() - start_time
+    print(f"Time taken to generate answer: {answer_time:.2f} seconds")
+    return respuesta, score, round(answer_time,2)
 
 #context = retrieved_docs[0][0]
 #answer = answer_question(query, context)

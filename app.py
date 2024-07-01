@@ -1,13 +1,11 @@
 """Aplicación Principal"""
 # import os
-from flask import Flask, render_template, request, jsonify, Response, send_file, render_template_string
+from flask import Flask, render_template, request, jsonify, Response
 from ChatbotUPN import encontrar_respuesta
-from GenerarTexto import respuestas_generadas
+# from GenerarTexto import respuestas_generadas
 from GenerarRespuestas import answer_question
 from tts_api_vits import generar_Audio
-import pdfkit
-import io
-import logging
+
 
 # from weasyprint import HTML
 # Debugging by enabling pdfkit logging
@@ -26,7 +24,7 @@ def home():
         if request.form["tipo_entrenado"].capitalize() == "True":
             #resp = respuestas_generadas(request.form["mensaje"])
             print("Respuestas")
-            resp = answer_question(request.form["mensaje"])
+            resp, calidad, tiempo = answer_question(request.form["mensaje"])
             print("resp", resp)
             print("Audios")
             audio = []
@@ -37,7 +35,9 @@ def home():
         else:
             resp = encontrar_respuesta(request.form["mensaje"])
             audio = generar_Audio(resp, request.form["numero_pregunta"])
-        return jsonify({'fin': resp, 'audio': audio})
+            calidad="Baja"
+            tiempo="0:00"
+        return jsonify({'fin': resp, 'audio': audio, 'calidad':calidad, 'tiempo':tiempo})
     return render_template('index.html')
 
 
