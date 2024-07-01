@@ -90,7 +90,7 @@ body{
 
 .message-box {
   position: relative;
-  height: calc(92vh - 5rem); /* Altura fija para permitir desplazamiento */
+  height: calc(88vh - 5rem); /* Altura fija para permitir desplazamiento */
   overflow-y: auto; /* Habilitar desplazamiento vertical */
 }
 /* Ocultar scrollbar */
@@ -140,7 +140,7 @@ body{
   /* height: 100%; */
   padding-top: 30px;
   width: auto;
-  height: calc(92vh - 5rem);
+  height: calc(88vh - 5rem);
   overflow-y: auto;
 }
 .grid-item {

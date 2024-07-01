@@ -8,13 +8,14 @@ input_message.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
    event.preventDefault();
    
-   //buscar_respuesta(messageBar.value, respuesta_entrenada)
-   buscar_respuesta(verificar_signosinterrogacion(messageBar.value), respuesta_entrenada)
+   buscar_respuesta(messageBar.value, respuesta_entrenada)
+   //buscar_respuesta(verificar_signosinterrogacion(messageBar.value), respuesta_entrenada)
   }
 });
 
 sendBtn.onclick = function () {
-  buscar_respuesta(verificar_signosinterrogacion(messageBar.value), respuesta_entrenada)
+  buscar_respuesta(messageBar.value, respuesta_entrenada)
+  //buscar_respuesta(verificar_signosinterrogacion(messageBar.value), respuesta_entrenada)
 }
 function verificar_signosinterrogacion(texto){
   const inputText = texto.trim();
