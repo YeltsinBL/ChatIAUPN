@@ -37,7 +37,7 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
 
     //const UserTypedMessage = messageBar.value;
     messageBar.value = "";
-    console.log(entrenado)
+    //console.log(entrenado)
     let message =
       `<div class="chat message">
         <img src="static/img/person.png">
@@ -50,11 +50,17 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
         <img src="../static/img/upn.svg">
         <div class="respuesta">
           <span class= "new">Obteniendo respuesta...</span>
+          <div class="calidad hidden">Si la respuesta no es de de tu agrado, puedes reformularla de diferente forma.</div>
           <div class="multimedia hidden">
             <button id="play_btnVoz" class="boton" onclick="reproducir_voz(this)">
               <img id="img_volume" class="img_volumen" src="../static/img/volume.svg">
               <audio class="audioprueba" src="http://localhost:5000/wav" hidden>
             </button>
+            <div class="calidad_tiempo">
+              <div class="tiempo">
+                <span class="tiempo_span"></span> seg
+              </div>
+            </div>
           </div>
         </div>
       </div>`
@@ -72,22 +78,30 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
       success: function (data) {
         console.log(data)
         if(entrenado){
-          console.log(data.fin)
+          //console.log(data.fin)
           if(data.fin.length >0) {
             let verificar=0
             data.fin.forEach((dato) => {
               const ChatBotResponse = document.querySelector(".response .new");
-              console.log(dato)
+              //console.log(dato)
               ChatBotResponse.innerHTML = `${dato}`
               if(!dato.includes("Lo siento,")){
-                const divs = document.querySelectorAll('.response .multimedia')
+                const divs = document.querySelectorAll('.response')
                 const lastDiv = divs[divs.length - 1];
-                console.log(lastDiv)
-                const aud = lastDiv.querySelector('.boton .audioprueba')
-                console.log(aud)
+                const div_multimedia = lastDiv.querySelector('.multimedia')
+                //console.log(div_multimedia)
+                const aud = div_multimedia.querySelector('.boton .audioprueba')
+                //console.log(aud)
                 aud.src="http://localhost:5000/wav/"+data.audio[verificar]
                 lector_texto(document.getElementsByClassName("img_volumen"), dato, aud)
-                lastDiv.classList.remove('hidden');
+                const div_calidad_tiempo = div_multimedia.querySelector('.calidad_tiempo')
+                if(data.calidad <= 0.49){
+                  lastDiv.querySelector('.calidad').classList.remove('hidden');
+                }
+                const textSpan = div_calidad_tiempo.querySelector('.tiempo_span')
+                textSpan.innerHTML = data.tiempo
+                //console.log(textSpan)
+                div_multimedia.classList.remove('hidden');
               }
               verificar +=1
               ChatBotResponse.classList.remove("new");
@@ -119,7 +133,7 @@ function buscar_respuesta(UserTypedMessage, entrenado) {
         ChatBotResponse.classList.remove("new");
       },
       error: function () {
-          console.log('Error en obtener respuestas');
+          //console.log('Error en obtener respuestas');
           ChatBotResponse.innerHTML = "Lo siento, no he logrado comprender tu pregunta. Pregunta de nuevo por favor."
           ChatBotResponse.classList.remove("new");
       }
@@ -180,7 +194,7 @@ function lector_texto(elemento=null,texto, audio) {
 */
   // Pausar el audio actual si está reproduciéndose
   if (currentAudio && currentAudio !== audio) {
-    console.log("Entro a pausar")
+    //console.log("Entro a pausar")
     currentAudio.pause();
     currentAudio.currentTime = 0;
     beforePlayBtn.src = volume_off;

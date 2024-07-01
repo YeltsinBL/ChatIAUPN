@@ -34,9 +34,9 @@ body{
 }
 
 .response{
-  background-color: goldenrod;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  border-radius: 50px;
+  background-color: rgb(252, 191, 0);
+  /* border: 1px solid rgba(0, 0, 0, 0.8); */
+  border-radius: 10px;
   margin-bottom: 5px;
 }
 
@@ -104,7 +104,7 @@ body{
   scrollbar-width: none;  /* Firefox */
 }
 .message{
-  border: 1px solid rgba(126, 125, 125, 0.8);
+  /* border: 1px solid rgba(126, 125, 125, 0.8); */
   border-radius: 34px;
   margin-bottom: 5px;
 }
@@ -303,4 +303,18 @@ input:checked + .slider:before {
   border: 1px solid #f5c6cb;
   border-radius: 5px;
   z-index: 1000;
+}
+.respuesta{
+  width: -webkit-fill-available;
+}
+.multimedia{
+  display: flex;
+  justify-content: space-between;
+}
+.calidad{
+  font-style: italic;
+  font-size: 13px;
+}
+.tiempo{
+  font-size: 13px;
 }

@@ -8,17 +8,17 @@
         </div>
     </div> -->
       <div class="grid-item">
-        <div><p style="font-weight: bold;">Chat Inteligente UPN</p></div>
+        <div><p style="font-weight: bold;">UPN-GPT</p></div>
       </div>
     <div class="grid-container">
       <div class="grid-item">
         <div>¿En que puedo ayudarte? Algunos ejemplos</div>
       </div>
       <div class="grid-item grid-item-t">
-        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Qué es Blackboard y cómo puedo acceder a él?</div>
-        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Los servicios de la universidad, como la biblioteca o la losa deportiva, están disponibles durante las vacaciones?</div>
-        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Cómo puedo acceder a los materiales de clase, como presentaciones de diapositivas o lecturas asignadas?</div>  
-        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Cómo puedo saber más sobre la investigación y publicaciones de un profesor?</div>
+        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Qué es Blackboard?</div>
+        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Qué servicios de la universidad están disponibles durante las vacaciones?</div>
+        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Cómo puedo acceder a los materiales de clase?</div>  
+        <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Cómo puedo saber más sobre la investigación de un profesor?</div>
         <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Qué debo hacer si tengo un conflicto con un profesor?</div>
         <div class="grid-item-two cursor-pointer hover-div hover:bg-gray-200 hover:scale-105 transition duration-300">¿Qué debo hacer si necesito posponer una cita con un profesor?</div> 
       </div>
@@ -34,17 +34,23 @@
             Soy un chatbot para la Universidad Privada del Norte. Puedes hacerme preguntas.
           </span>
           <div id="multimedia" class="multimedia">
-          <button id="play_btnVoz" class="boton" onclick="reproducir_voz(this)">
-            <img id="img_volume" class="img_volumen" src="../static/img/volume.svg">
-            <audio class="audioprueba" src="http://localhost:5000/wav" hidden>
-          </button>
-          <button>PDF</button>
+            <button id="play_btnVoz" class="boton" onclick="reproducir_voz(this)">
+              <img id="img_volume" class="img_volumen" src="../static/img/volume.svg">
+              <audio class="audioprueba" src="http://localhost:5000/wav" hidden>
+            </button>
+            <div class="calidad_tiempo">
+              <div class="calidad ">Nivel:<div class="cuadro_nivel"></div>
+              </div>
+              <div class="tiempo">
+                Tiempo:<span>7</span>  seg
+              </div>
+            </div>
           </div>
         </div>
 
       </div> -->
     </div>
-    <div class="grid-container-botontipo">
+    <div class="grid-container-botontipo hidden">
       <div class="grid-item-botontipo">
         <div id="entrenado" >Respuesta
         <label class="switch">
